@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>哈哈·HR科技金融日报</title>
+<style>
+:root {
+  --primary: #1a5ca8; --primary-dark: #0f2a4a;
+  --accent-red: #e74c3c; --accent-orange: #f39c12; --accent-green: #27ae60;
+  --accent-purple: #8e44ad; --accent-blue: #3498db;
+  --bg: #f4f6f9; --card-bg: #ffffff;
+  --text: #1a2a3a; --text-light: #7f8c9a; --border: #e8ecf0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+
+/* Header */
+.header { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; padding: 20px 16px 16px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(15,42,74,0.25); }
+.header-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+.header-brand { font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 1px; }
+.header-date-box { text-align: right; }
+.header-date-box .weekday { font-size: 11px; color: rgba(255,255,255,0.6); }
+.header-date-box .date { font-size: 18px; font-weight: 800; line-height: 1.2; }
+.header h1 { font-size: 20px; font-weight: 800; margin-bottom: 2px; }
+.header h1 span { color: #60b8ff; }
+.header-sub { font-size: 12px; color: rgba(255,255,255,0.55); }
+
+/* Highlights */
+.highlights { padding: 16px 16px 0; }
+.highlight-label { font-size: 11px; font-weight: 700; color: var(--text-light); letter-spacing: 1px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.highlight-label::before { content: ''; display: inline-block; width: 3px; height: 12px; background: var(--primary); border-radius: 2px; }
+.highlight-card { background: var(--card-bg); border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-left: 4px solid var(--primary); }
+.highlight-card.red { border-left-color: var(--accent-red); }
+.highlight-card.orange { border-left-color: var(--accent-orange); }
+.highlight-card.green { border-left-color: var(--accent-green); }
+.highlight-card.purple { border-left-color: var(--accent-purple); }
+.highlight-card.blue { border-left-color: var(--accent-blue); }
+.hl-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.hl-cat { font-size: 10px; font-weight: 700; color: white; background: var(--primary); padding: 2px 8px; border-radius: 4px; }
+.hl-cat.red { background: var(--accent-red); }
+.hl-cat.orange { background: var(--accent-orange); }
+.hl-cat.green { background: var(--accent-green); }
+.hl-cat.purple { background: var(--accent-purple); }
+.hl-cat.blue { background: var(--accent-blue); }
+.hl-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.5; margin-bottom: 4px; }
+.hl-body { font-size: 12px; color: var(--text-light); line-height: 1.6; }
+.hl-action { margin-top: 8px; font-size: 11px; color: var(--primary); font-weight: 600; }
+.hl-action::before { content: '→ '; }
+.hl-link { margin-top: 6px; }
+.hl-link a { font-size: 11px; color: var(--text-light); text-decoration: none; border-bottom: 1px dashed var(--text-light); }
+
+/* Nav */
+.nav-bar { display: flex; gap: 6px; padding: 14px 16px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.nav-bar::-webkit-scrollbar { display: none; }
+.nav-pill { flex-shrink: 0; font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; background: white; color: var(--text-light); border: 1.5px solid var(--border); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.nav-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+/* Section */
+.section-wrap { padding: 0 16px 16px; }
+.section-card { background: var(--card-bg); border-radius: 14px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+.sec-head { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.sec-head-left { display: flex; align-items: center; gap: 10px; }
+.sec-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.sec-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.sec-count { font-size: 11px; color: var(--text-light); background: var(--bg); padding: 2px 8px; border-radius: 10px; }
+.sec-toggle { font-size: 16px; color: var(--text-light); transition: transform 0.2s; }
+.sec-body { padding: 12px 16px; }
+.sec-body.hidden { display: none; }
+
+/* News */
+.news-row { padding: 12px 0; border-bottom: 1px solid var(--border); }
+.news-row:last-child { border-bottom: none; padding-bottom: 0; }
+.news-row:first-child { padding-top: 0; }
+.news-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.news-label { font-size: 9px; font-weight: 700; color: white; padding: 1px 6px; border-radius: 3px; }
+.news-time { font-size: 10px; color: var(--text-light); }
+.news-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.5; margin-bottom: 3px; }
+.news-body { font-size: 11px; color: var(--text-light); line-height: 1.6; }
+.news-insight { margin-top: 5px; font-size: 11px; color: var(--primary); background: rgba(26,92,168,0.05); padding: 5px 8px; border-radius: 6px; }
+.news-link { margin-top: 4px; }
+.news-link a { font-size: 10px; color: var(--text-light); text-decoration: none; border-bottom: 1px dashed var(--text-light); }
+
+/* KB Card */
+.kb-card { background: linear-gradient(135deg, var(--primary) 0%, #2980b9 100%); color: white; border-radius: 14px; padding: 18px 16px; margin: 0 16px 12px; }
+.kb-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.6); letter-spacing: 1px; margin-bottom: 8px; }
+.kb-title { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+.kb-type { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+.kb-body { font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 10px; }
+.kb-action { font-size: 11px; color: #a8d4ff; background: rgba(255,255,255,0.1); padding: 6px 10px; border-radius: 8px; line-height: 1.5; }
+.kb-ai { background: linear-gradient(135deg, #8e44ad 0%, #6c3483 100%); }
+
+/* Comp Grid */
+.comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.comp-card { background: var(--bg); border-radius: 12px; padding: 14px; }
+.comp-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.comp-tag { font-size: 9px; font-weight: 700; color: white; background: var(--text-light); padding: 1px 6px; border-radius: 3px; display: inline-block; margin-bottom: 6px; }
+.comp-tag.hot { background: var(--accent-red); }
+.comp-tag.new { background: var(--accent-green); }
+.comp-item { font-size: 11px; color: var(--text-light); line-height: 1.6; margin-bottom: 2px; }
+.comp-item strong { color: var(--text); }
+
+/* Footer */
+.footer { text-align: center; padding: 20px 16px; font-size: 11px; color: var(--text-light); }
+.footer-logo { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.footer-note { line-height: 1.6; }
+
+/* Color classes */
+.bg-blue { background: var(--primary); }
+.bg-orange { background: var(--accent-orange); }
+.bg-green { background: var(--accent-green); }
+.bg-purple { background: var(--accent-purple); }
+.bg-teal { background: #0e8076; }
+.bg-red { background: var(--accent-red); }
+.bg-gray { background: #7f8c8d; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-brand">HAHAHA DAILY</div>
+      <h1>哈哈<span>·</span>日报</h1>
+      <div class="header-sub">HR科技金融 · 每日必读</div>
+    </div>
+    <div class="header-date-box">
+      <div class="weekday">星期五</div>
+      <div class="date">04.11</div>
+    </div>
+  </div>
+</div>
+
+<!-- TODAY HIGHLIGHTS -->
+<div class="highlights">
+  <div class="highlight-label">今日核心</div>
+  <div class="highlight-card red">
+    <div class="hl-top"><span class="hl-cat red">全球HR</span></div>
+    <div class="hl-title">Q1全球科技裁员近8万人，29%岗位被AI替代</div>
+    <div class="hl-body">裁员潮持续但高技能人才争夺并未降温，"79,000人失业，但人才战争远未结束"</div>
+    <div class="hl-action">🎯 行动项：重新审视招聘策略，高技能人才吸引力策略比以往更重要</div>
+    <div class="hl-link"><a href="https://www.bloomberg.com/news/articles/2026-04-02/tech-layoffs-ai-replacement" target="_blank">Bloomberg：科技裁员深度报道 →</a></div>
+  </div><div class="highlight-card orange">
+    <div class="hl-top"><span class="hl-cat orange">信贷风控</span></div>
+    <div class="hl-title">央行一次性信用修复政策落地，万元内逾期可"清零"</div>
+    <div class="hl-body">2020年1月-2026年3月期间产生、且已还清的逾期，可申请修复，4月起集中受理</div>
+    <div class="hl-action">🎯 行动项：关注此政策对存量客户资产质量的影响，评估风控模型是否需要重新校准</div>
+    <div class="hl-link"><a href="https://www.pbc.gov.cn" target="_blank">中国人民银行官网 →</a></div>
+  </div><div class="highlight-card green">
+    <div class="hl-top"><span class="hl-cat green">精准竞品</span></div>
+    <div class="hl-title">百融云创激进扩张：185岗位在招，AI Agent加速落地</div>
+    <div class="hl-body">"硅基员工"已推向市场，RaaS商业模式驱动产品矩阵重塑</div>
+    <div class="hl-action">🎯 行动项：关注其技术岗薪资变化，评估睿智科技在AI人才市场的竞争力</div>
+    <div class="hl-link"><a href="https://www.brjr.com.cn" target="_blank">百融云创官网 →</a></div>
+  </div><div class="highlight-card blue">
+    <div class="hl-top"><span class="hl-cat blue">大厂动态</span></div>
+    <div class="hl-title">蚂蚁集团春招70%为AI岗位，支付AI用户破亿</div>
+    <div class="hl-body">AI战略全面落地，隐私计算+智能风控持续扩招，技术人才竞争进入新阶段</div>
+    <div class="hl-action">🎯 行动项：关注AI+风控复合型人才市场供给，思考差异化吸引策略</div>
+    <div class="hl-link"><a href="https://www.antgroup.com" target="_blank">蚂蚁集团官网 →</a></div>
+  </div>
+</div>
+
+<!-- SECTION NAV -->
+<div class="nav-bar">
+  <div class="nav-pill active" onclick="switchSection('hr-global')">🌏 全球HR</div>
+  <div class="nav-pill" onclick="switchSection('hr-china')">🇨🇳 中国HR</div>
+  <div class="nav-pill" onclick="switchSection('fintech')">💹 金融科技</div>
+  <div class="nav-pill" onclick="switchSection('risk')">🔐 信贷风控</div>
+  <div class="nav-pill" onclick="switchSection('comp-pure')">🎯 精准竞品</div>
+  <div class="nav-pill" onclick="switchSection('comp-big')">🏢 大厂生态</div>
+  <div class="nav-pill" onclick="switchSection('learn')">📚 学习推荐</div>
+</div>
+
+<!-- SECTIONS -->
+<div class="section-wrap">
+  <div id="sec-hr-global" class="section-card">
+  <div class="sec-head" onclick="toggleSection('hr-global')">
+    <div class="sec-head-left">
+      <div class="sec-icon bg-blue">🌏</div>
+      <div class="sec-title">全球HR动态</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="sec-count">2条</span>
+      <span class="sec-toggle" id="toggle-hr-global">▼</span>
+    </div>
+  </div>
+  <div class="sec-body" id="body-hr-global">
+    <div class="news-row">
+    <div class="news-meta">
+      <span class="news-label bg-red">裁员</span>
+      <span class="news-time">Bloomberg · 4月2日</span>
+    </div>
+    <div class="news-title">2026年Q1全球科技裁员近8万人，约50%因AI替代</div>
+    <div class="news-body">美国科技企业裁员公告持续加速，Q2未见放缓信号，但高技能人才竞争并未降温。</div>
+    <div class="news-insight">💡 启示：裁员≠人才过剩，高技能人才争夺依然激烈，HR吸引力策略需升级</div>
+    <div class="news-link"><a href="https://www.bloomberg.com/news/articles/2026-04-02/tech-layoffs-q1-2026" target="_blank">Bloomberg原文 →</a></div>
+  </div><div class="news-row">
+    <div class="news-meta">
+      <span class="news-label bg-purple">趋势</span>
+      <span class="news-time">Gartner · 2026</span>
+    </div>
+    <div class="news-title">Gartner：2026年7大HR趋势，AI教练+个性化招聘为主轴</div>
+    <div class="news-body">29%的AI生产力提升来自HR运营模式转型，职能重构成为不可逆趋势。</div>
+    <div class="news-insight">💡 启示：开始评估公司内部哪些HR流程可以被AI辅助或替代</div>
+    <div class="news-link"><a href="https://www.gartner.com/en/human-resources/topics/hr-trends" target="_blank">Gartner HR趋势报告 →</a></div>
+  </div>
+  </div>
+</div><div id="sec-hr-china" class="section-card">
+  <div class="sec-head" onclick="toggleSection('hr-china')">
+    <div class="sec-head-left">
+      <div class="sec-icon bg-orange">🇨🇳</div>
+      <div class="sec-title">中国HR动态</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="sec-count">2条</span>
+      <span class="sec-toggle" id="toggle-hr-china">▼</span>
+    </div>
+  </div>
+  <div class="sec-body" id="body-hr-china">
+    <div class="news-row">
+    <div class="news-meta">
+      <span class="news-label bg-orange">政策</span>
+      <span class="news-time">人社部 · 4月1日</span>
+    </div>
+    <div class="news-title">2026届城市联合招聘春季专场在银川启动，AI岗位扎堆</div>
+    <div class="news-body">人社部副部长颜清辉出席，数字经济、新兴岗位成为今年春招最大看点。</div>
+    <div class="news-insight">💡 启示：关注校招窗口期，提前布局AI/数据类岗位的候选人池</div>
+    
+  </div><div class="news-row">
+    <div class="news-meta">
+      <span class="news-label bg-green">人才</span>
+      <span class="news-time">脉脉 · 2026</span>
+    </div>
+    <div class="news-title">脉脉发布80家"隐形大厂"，智谱、SHEIN、地平线入选</div>
+    <div class="news-body">反映中高端人才择业风向正在变化，传统大厂吸引力下降，新兴科技公司成为热门选择。</div>
+    <div class="news-insight">💡 启示：雇主品牌建设需跟上，讲述技术深度+成长空间的故事</div>
+    
+  </div>
+  </div>
+</div><div id="sec-fintech" class="section-card">
+  <div class="sec-head" onclick="toggleSection('fintech')">
+    <div class="sec-head-left">
+      <div class="sec-icon bg-teal">💹</div>
+      <div class="sec-title">金融科技</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="sec-count">2条</span>
+      <span class="sec-toggle" id="toggle-fintech">▼</span>
+    </div>
+  </div>
+  <div class="sec-body" id="body-fintech">
+    <div class="news-row">
+    <div class="news-meta">
+      <span class="news-label bg-teal">监管</span>
+      <span class="news-time">央视财经 · 3月30日</span>
+    </div>
+    <div class="news-title">5万亿网贷行业迎来最强监管：费用结构成为新焦点</div>
+    <div class="news-body">曝光低息诱惑背后"高息套路陷阱"——宣传月息0.8%，实含多重费用，监管细化至费用清单。</div>
+    <div class="news-insight">💡 启示：合规成本上升，关注公司产品费率结构是否符合最新监管要求</div>
+    
+  </div><div class="news-row">
+    <div class="news-meta">
+      <span class="news-label bg-blue">业绩</span>
+      <span class="news-time">兴业消金 · 年报</span>
+    </div>
+    <div class="news-title">兴业消费金融2025年净利润12亿，同比大增179%</div>
+    <div class="news-body">消费金融赛道整体业绩向好，但监管收紧信号同步释放，行业进入"规范发展"新阶段。</div>
+    <div class="news-insight">💡 启示：业绩增长需匹配合规能力，关注行业合规团队建设趋势</div>
+    
+  </div>
+  </div>
+</div><div id="sec-risk" class="section-card">
+  <div class="sec-head" onclick="toggleSection('risk')">
+    <div class="sec-head-left">
+      <div class="sec-icon bg-purple">🔐</div>
+      <div class="sec-title">信贷风控</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="sec-count">2条</span>
+      <span class="sec-toggle" id="toggle-risk">▼</span>
+    </div>
+  </div>
+  <div class="sec-body" id="body-risk">
+    <div class="news-row">
+    <div class="news-meta">
+      <span class="news-label bg-purple">政策</span>
+      <span class="news-time">央行 · 2026</span>
+    </div>
+    <div class="news-title">央行新监管周期：利率透明化+费用清单强制披露</div>
+    <div class="news-body">信贷市场进入新监管周期，降低融资中间成本成为政策主轴，企业融资与个人借贷双线并进。</div>
+    <div class="news-insight">💡 启示：风控模型需同步政策调整，关注合规部门与风控部门的协同机制</div>
+    
+  </div><div class="news-row">
+    <div class="news-meta">
+      <span class="news-label bg-red">黑产</span>
+      <span class="news-time">威胁猎人 · 3月30日</span>
+    </div>
+    <div class="news-title">骗贷手法"真实化"升级：黑产用真实流水绕过传统风控</div>
+    <div class="news-body">从"虚假材料"演变为"真实补缴"，攻击手法显著升级，传统规则风控失效。</div>
+    <div class="news-insight">💡 启示：反欺诈需引入行为生物特征、关系图谱、实时决策新一代手段</div>
+    <div class="news-link"><a href="https://www.threathunter.cn" target="_blank">威胁猎人报告 →</a></div>
+  </div>
+  </div>
+</div><div id="sec-comp-pure" class="section-card">
+  <div class="sec-head" onclick="toggleSection('comp-pure')">
+    <div class="sec-head-left">
+      <div class="sec-icon bg-red">🎯</div>
+      <div class="sec-title">精准竞品</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="sec-count">直接对标</span>
+      <span class="sec-toggle" id="toggle-comp-pure">▼</span>
+    </div>
+  </div>
+  <div class="sec-body" id="body-comp-pure">
+    <div class="comp-grid"><div class="comp-card">
+  <div class="comp-name">百融云创</div>
+  <span class="comp-tag hot">热招</span>
+  <div class="comp-item"><strong>动态：</strong>RaaS+AI Agent激进</div><div class="comp-item"><strong>在招：</strong>185个职位</div><div class="comp-item"><strong>特色：</strong>硅基员工推向市场</div><div class="comp-item"><strong>ESG：</strong>公益助残项目推进</div>
+  <div style="margin-top:6px"><a href="https://www.brjr.com.cn" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div><div class="comp-card">
+  <div class="comp-name">同盾科技</div>
+  <span class="comp-tag ">扩招</span>
+  <div class="comp-item"><strong>动态：</strong>2026秋招全面启动</div><div class="comp-item"><strong>在招：</strong>44个职位</div><div class="comp-item"><strong>特色：</strong>出海布局，小语种岗</div><div class="comp-item"><strong>方向：</strong>解决方案+销售</div>
+  <div style="margin-top:6px"><a href="https://www.tongdun.cn" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div><div class="comp-card">
+  <div class="comp-name">天创信用</div>
+  <span class="comp-tag ">平稳</span>
+  <div class="comp-item"><strong>资质：</strong>央行企业征信牌照</div><div class="comp-item"><strong>在招：</strong>约15个职位</div><div class="comp-item"><strong>特色：</strong>合规资质壁垒</div><div class="comp-item"><strong>产品：</strong>灵创·X风策平台</div>
+  <div style="margin-top:6px"><a href="https://www.tianchuangcredit.com" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div><div class="comp-card">
+  <div class="comp-name">富数科技</div>
+  <span class="comp-tag new">新锐</span>
+  <div class="comp-item"><strong>技术：</strong>联邦学习+隐私计算</div><div class="comp-item"><strong>投资：</strong>中网投战略投资</div><div class="comp-item"><strong>方向：</strong>银行数据互通</div><div class="comp-item"><strong>招聘：</strong>算法/安全方向</div>
+  <div style="margin-top:6px"><a href="https://www.fudata.cn" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div><div class="comp-card">
+  <div class="comp-name">易鑫集团</div>
+  <span class="comp-tag hot">热招</span>
+  <div class="comp-item"><strong>上市：</strong>港股02860.HK</div><div class="comp-item"><strong>定位：</strong>汽车金融AI SaaS</div><div class="comp-item"><strong>动态：</strong>AI+金融科技深度整合，智能风控团队持续扩招</div>
+  <div style="margin-top:6px"><a href="https://www.yixin.com" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div></div>
+  </div>
+</div><div id="sec-comp-big" class="section-card">
+  <div class="sec-head" onclick="toggleSection('comp-big')">
+    <div class="sec-head-left">
+      <div class="sec-icon bg-gray">🏢</div>
+      <div class="sec-title">大厂金融科技生态</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="sec-count">行业格局</span>
+      <span class="sec-toggle" id="toggle-comp-big">▼</span>
+    </div>
+  </div>
+  <div class="sec-body" id="body-comp-big">
+    <div class="comp-grid"><div class="comp-card">
+  <div class="comp-name">蚂蚁集团</div>
+  <span class="comp-tag hot">热招</span>
+  <div class="comp-item"><strong>春招：</strong>70%为AI岗位</div><div class="comp-item"><strong>产品：</strong>支付AI用户破亿</div><div class="comp-item"><strong>技术：</strong>隐私计算+智能风控</div>
+  <div style="margin-top:6px"><a href="https://www.antgroup.com" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div><div class="comp-card">
+  <div class="comp-name">度小满</div>
+  <span class="comp-tag ">平稳</span>
+  <div class="comp-item"><strong>资质：</strong>博士后工作站</div><div class="comp-item"><strong>方向：</strong>AI风控+智能信贷</div><div class="comp-item"><strong>招聘：</strong>风控算法方向</div>
+  <div style="margin-top:6px"><a href="https://www.duxiaoman.com" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div><div class="comp-card">
+  <div class="comp-name">火山引擎</div>
+  <span class="comp-tag ">扩招</span>
+  <div class="comp-item"><strong>背景：</strong>字节跳动金融云</div><div class="comp-item"><strong>动态：</strong>金融线持续扩招</div><div class="comp-item"><strong>方向：</strong>数据+风控+合规</div>
+  <div style="margin-top:6px"><a href="https://www.volcengine.com" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div><div class="comp-card">
+  <div class="comp-name">京东科技</div>
+  <span class="comp-tag ">春招</span>
+  <div class="comp-item"><strong>春招：</strong>11大方向</div><div class="comp-item"><strong>重点：</strong>金融科技方向</div><div class="comp-item"><strong>生态：</strong>京东金融+京东云</div>
+  <div style="margin-top:6px"><a href="https://www.jdt.com" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div><div class="comp-card">
+  <div class="comp-name">瓴羊（阿里）</div>
+  <span class="comp-tag ">数据</span>
+  <div class="comp-item"><strong>背景：</strong>阿里数据中台</div><div class="comp-item"><strong>方向：</strong>数据治理+分析</div><div class="comp-item"><strong>产品：</strong>企业数据智能</div>
+  <div style="margin-top:6px"><a href="https://www.lingyang.com" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div><div class="comp-card">
+  <div class="comp-name">腾讯金融科技</div>
+  <span class="comp-tag ">稳定</span>
+  <div class="comp-item"><strong>生态：</strong>微信支付核心</div><div class="comp-item"><strong>方向：</strong>风控稳定招聘</div><div class="comp-item"><strong>特点：</strong>稳扎稳打，技术深度</div>
+  <div style="margin-top:6px"><a href="https://www.tencent.com" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div><div class="comp-card">
+  <div class="comp-name">阿里云</div>
+  <span class="comp-tag hot">热招</span>
+  <div class="comp-item"><strong>方向：</strong>金融安全架构师热招</div><div class="comp-item"><strong>产品：</strong>金融云全栈解决方案</div><div class="comp-item"><strong>趋势：</strong>金融行业云化持续推进，大客户定制化服务增加</div>
+  <div style="margin-top:6px"><a href="https://www.aliyun.com" target="_blank" style="font-size:10px;color:var(--text-light);text-decoration:none;border-bottom:1px dashed var(--text-light)">官网 →</a></div>
+</div></div>
+  </div>
+</div><div id="sec-learn" class="section-card">
+  <div class="sec-head" onclick="toggleSection('learn')">
+    <div class="sec-head-left">
+      <div class="sec-icon bg-green">📚</div>
+      <div class="sec-title">每日学习推荐</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="sec-count">3个推荐</span>
+      <span class="sec-toggle" id="toggle-learn">▼</span>
+    </div>
+  </div>
+  <div class="sec-body" id="body-learn">
+    <div class="news-row">
+    <div class="news-meta">
+      <span class="news-label bg-teal">管理理论</span>
+      <span class="news-time">今日推荐</span>
+    </div>
+    <div class="news-title">平衡计分卡（BSC）—— 从财务指标到战略落地</div>
+    <div class="news-body">1992年卡普兰&诺顿提出，从财务、客户、内部流程、学习成长四个维度衡量组织绩效。</div>
+    <div class="news-insight">💡 对HR的落地价值：可作为绩效体系设计框架，将人才培养指标纳入组织战略</div>
+    <div class="news-link"><a href="https://hbr.org/1992/01/the-balanced-scorecard-measures-that-drive-performance-2" target="_blank">哈佛商业评论原文 →</a></div>
+  </div><div class="news-row">
+    <div class="news-meta">
+      <span class="news-label bg-purple">HR专业</span>
+      <span class="news-time">今日推荐</span>
+    </div>
+    <div class="news-title">HR三支柱模型（尤里奇）—— 从事务到战略的转型路径</div>
+    <div class="news-body">HR战略合作伙伴(HRBP) + 专业化中心(CoE) + 共享服务(SSC)，实现HR价值重构。</div>
+    <div class="news-insight">💡 对300人公司的建议：至少要有"业务触角"(BP意识)+"专业深耕"(CoE思维)，SSC可适度外包</div>
+    <div class="news-link"><a href="https://www.shrm.org/home" target="_blank">SHRM资源中心 →</a></div>
+  </div><div class="news-row">
+    <div class="news-meta">
+      <span class="news-label bg-blue">AI学习</span>
+      <span class="news-time">今日推荐</span>
+    </div>
+    <div class="news-title">Coursera《AI For Everyone》—— 理解AI，不写代码</div>
+    <div class="news-body">吴恩达出品，4小时可完成，系统理解AI能做什么、不能做什么，以及AI对商业的影响。</div>
+    <div class="news-insight">💡 HR负责人学完能用：评估AI供应商方案、制定公司AI+HR路线图、与技术团队同频对话</div>
+    <div class="news-link"><a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank">Coursera课程链接 →</a></div>
+  </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-logo">哈哈哈</div>
+  <div class="footer-note">
+    由哈哈哈每日自动生成 · 数据来源综合公开资讯<br>
+    每日早上9:00自动更新 · 刷新页面查看最新内容
+  </div>
+</div>
+
+<script>
+function toggleSection(id) {
+  var body = document.getElementById('body-' + id);
+  var toggle = document.getElementById('toggle-' + id);
+  if (body.classList.contains('hidden')) {
+    body.classList.remove('hidden');
+    toggle.textContent = '▲';
+  } else {
+    body.classList.add('hidden');
+    toggle.textContent = '▼';
+  }
+}
+function switchSection(id) {
+  document.querySelectorAll('.nav-pill').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-pill').forEach(function(p) {
+    if (p.getAttribute('onclick').indexOf("'" + id + "'") !== -1) p.classList.add('active');
+  });
+  var sec = document.getElementById('sec-' + id);
+  if (sec) {
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(function() {
+      var body = document.getElementById('body-' + id);
+      var toggle = document.getElementById('toggle-' + id);
+      if (body) { body.classList.remove('hidden'); if (toggle) toggle.textContent = '▲'; }
+    }, 400);
+  }
+}
+</script>
+</body>
+</html>
