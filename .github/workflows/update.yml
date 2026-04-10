@@ -1,0 +1,28 @@
+name: Daily Newsletter Update
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate newsletter
+        run: |
+          pip install yagmail beautifulsoup4 lxml requests
+          python newsletter_generator.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SENDER_EMAIL: monica_hr2026@163.com
+          SENDER_AUTH_CODE: ${{ secrets.SENDER_AUTH_CODE }}
+          RECIPIENT_EMAIL: 15311195668@163.com
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add newsletter.html
+          git diff --staged --quiet || git commit -m "Update newsletter $(date +%Y-%m-%d)"
+          git push
